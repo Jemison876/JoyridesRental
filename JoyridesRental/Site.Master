@@ -1,0 +1,150 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="JoyridesRental.SiteMaster" %>
+
+<!DOCTYPE html>
+<%--USE CARDS TO DISPLAY CAR PRODUCTS; BROWSE BY BRAND--%>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> Joyrides Rentals</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="Content/Site.css" rel="stylesheet" />    
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <nav class ="navbar navbar-expand-md navbar-light bg-light sticky-top">            
+            <div class ="container-fluid">
+                <a class =" navbar-brand" href="Default.aspx"><span><img class="logo" style="height:25px; width:auto "  src= "img/singlepurple.png" /> Joyrides Rental</span></a>
+                <button class ="navbar-toggler" type ="button" data-toggle ="collapse" data-target="#navbarResponsive">
+                    <span class ="navbar-toggler-icon"></span>
+                </button>
+                <div class ="collapse navbar-collapse" id ="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item ">
+                            <a class="nav-link" id="adminLink" visible="false" runat="server" href ="~/Admin/AdminPage">Admin</a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" runat="server" href ="~/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class ="nav-link" runat="server" href ="~/ProductList">Joy Rides</a>
+                        </li>                       
+                        <li class="nav-item">
+                            <a class ="nav-link" runat="server" href ="~/ShoppingCart" id="cartCount">&nbsp;</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class ="nav-link" runat="server" href ="~/About">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class ="nav-link" runat="server" href ="~/Contact">Contact Us</a>
+                        </li>
+                    </ul>
+                    <asp:LoginView runat="server" ViewStateMode="Disabled">
+                        <AnonymousTemplate>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a runat="server" href="~/Account/Register">Register</a></li>
+                                <li><a runat="server" href="~/Account/Login">Log in</a></li>
+                            </ul>
+                        </AnonymousTemplate>
+                        <LoggedInTemplate>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a runat="server" href="~/Account/Manage" title="Manage your account">Hello, <%: Context.User.Identity.GetUserName()  %> !</a></li>
+                                <li>
+                                    <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Log off" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />
+                                </li>
+                            </ul>
+                        </LoggedInTemplate>
+                    </asp:LoginView>
+                </div>
+            </div>
+        </nav>
+        <br /><br />       
+        <div id ="CategoryMenu" style ="text-align:center; visibility: hidden"" >
+            <asp:ListView ID="categoryList" 
+                ItemType="JoyridesRental.Models.Category" 
+                runat="server" 
+                SelectMethod="GetCategories" >
+                <ItemTemplate>
+                    <b style="font-size:large; font-style: normal">
+                        <a href="/ProductList.aspx?id=<%#: Item.CategoryID %>">
+                            <%#: Item.CategoryName %>
+                        </a>
+                    </b>
+                </ItemTemplate>
+                <ItemSeparatorTemplate> | </ItemSeparatorTemplate>
+            </asp:ListView>
+        </div>  
+                
+        <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>     
+            <br /><br />
+            <footer>              
+                <div class="container-fluid padding">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <img style="height:50px; width:auto" src="img/singlepurple.png" />
+                            <hr class="light" />
+                            <p>1(800)JOY-RIDE</p>
+                            <p>email@joyride.com</p>
+                            <p>100 Pineapple St</p>
+                            <p>Kingston, Jamaica</p>
+                        </div>
+                        <div class="col-md-4">
+                            <hr class="light" />
+                            <h5>Our Hours</h5>
+                            <hr class="light" />
+                            <p>Monday-Friday: 9am-5pm</p>
+                            <p>Saturday: 10am-4pm</p>
+                            <p>Sunday: closed</p>
+                        </div>
+                        <div class="col-md-4">
+                            <hr class="light" />
+                            <h5>Service Area</h5>
+                            <hr class="light" />
+                            <p>Port Henderson, St. Catherine</p>
+                            <p>Waterfront, Kingston</p>
+                            <p>Montego Bay, St. James</p>
+                            <p>Glenmuir, Clarendon</p>
+                        </div>
+                        <div class="col-12 text-center">
+                            <hr class="light" />
+                            <p>&copy; <%: DateTime.Now.Year %> - Joyrides Rentals</p>
+                        </div>
+                    </div>
+                </div>              
+            </footer>
+        </div>
+        <br/> 
+    </form>
+</body>
+</html>
